@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from network.models import *
 
 
 def index(request):
@@ -46,7 +46,9 @@ def register(request):
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(request, "network/register.html", {
-                "message": "Passwords must match."
+                "message": "Passwords must match.",
+                "prevUserName": username,
+                "prevEmail": email
             })
 
         # Attempt to create new user
@@ -61,3 +63,20 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+def create_post(request):
+    if not request.user.is_authenticated:
+        return HttpResponse("Client Validation Error")
+    if request.method == "POST":
+        postHeader = request.POST["header"]
+        postBody = request.POST["postBody"]
+        postedBy = User.objects.get(pk=request.user.id)
+
+        newPost = Post.objects.create(postBody=postBody, postHeader=postHeader, postedBy=postedBy)
+        newPost.save()
+
+    return HttpResponseRedirect(reverse("index"))
+    
+
+def fetch_posts(request):
+    pass

@@ -1,5 +1,23 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
-    TODO
+    <h1>ALL POSTS</h1>
+    {% if user.is_authenticated %}
+    <div class="PostBlockMain">
+        <form action="{% url 'create_post' %}" method="post">
+            {% csrf_token %}
+
+            <h3>New Post</h3>
+            <input type="text" name="header" class="form-control" style="width: 50%; margin-bottom: 10px;">
+            <textarea style="width: 50%" id="" cols="30" rows="10" name="postBody"></textarea>
+            <input type="submit" class="btn btn-primary" value="submit">
+        </form>
+    </div>
+    {% endif %}
+    <div id="allPosts">
+    </div>
+    {% block script %}
+        <script src="{% static 'network/loadContent.js' %}" type="text/javascript"></script>
+    {% endblock %}
 {% endblock %}

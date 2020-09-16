@@ -1,0 +1,19 @@
+body
+{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.PostBlockMain
+{
+    width: 100%;
+    border: 1px solid blanchedalmond;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+textarea
+{
+    padding: 5px;
+    border-radius: 6px;
+}
