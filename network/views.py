@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.http import JsonResponse
 
 from network.models import *
 
@@ -78,5 +79,13 @@ def create_post(request):
     return HttpResponseRedirect(reverse("index"))
     
 
+#loading posts should be managed here only
 def fetch_posts(request):
-    pass
+    start = int(request.GET.get("start")) 
+    end = int(request.GET.get("end"))
+    posts = list(Post.objects.values())[start:end]
+    return JsonResponse({
+        "posts": posts
+    })
+
+    
