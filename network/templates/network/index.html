@@ -9,8 +9,8 @@
             {% csrf_token %}
 
             <h3>New Post</h3>
-            <input type="text" name="header" class="form-control" style="width: 50%; margin-bottom: 10px;">
-            <textarea style="width: 50%" id="" cols="30" rows="10" name="postBody"></textarea>
+            <input type="text" name="header" class="form-control" style="width: 50%; margin-bottom: 10px;" required>
+            <textarea style="width: 50%" id="" cols="30" rows="10" name="postBody" required></textarea>
             <input type="submit" class="btn btn-primary" value="submit">
         </form>
     </div>

@@ -1,4 +1,4 @@
-var loadMoreListingIsRunning = false;
+var loadMorePostsIsRunning = false;
 var getAll = document.querySelectorAll.bind(this);
 var mainDiv = document.getElementById("allPosts");
 var start = 0;
@@ -8,45 +8,54 @@ var LOAD_AMOUNT = 5;
 //first load
 window.addEventListener("load", loadContent);
 
-
+window.onscroll = () => {
+    if (window.innerWidth + window.scrollY >= document.body.offsetHeight)
+    {
+        if (!loadMorePostsIsRunning)
+        {
+            loadContent();
+        }
+    }
+}
 function loadContent()
 {
-    console.log(start)
-    //TODO - fetch_posts not working rn
-    loadMoreListingIsRunning = true;
+    //console.log(start)
+    loadMorePostsIsRunning = true;
     fetch(`/fetch_posts?start=${start}&end=${end}`)
     .then(response => response.json())
-    .then(posts => {
-        console.log(posts)
-        for (let i = 0; i < posts["posts"].length; i++)
+    .then(data => {
+        console.log(data)
+        for (let i = 0; i < data["posts"].length; i++)
         {
             let postContainer = document.createElement("div");
             postContainer.className = "subPosts";
             postContainer.id = ["post" + (i + start)];
 
 
-            //TODO - load posts programmatically.
+            //load posts programmatically.
             let postHeader = document.createElement("h5");
-            postHeader.innerHTML = (posts["posts"])[i].postHeader;
+            postHeader.innerHTML = (data["posts"])[i].postHeader;
 
             let postBody = document.createElement("p");
-            postBody.innerHTML = (posts["posts"])[i].postBody;
+            postBody.innerHTML = (data["posts"])[i].postBody;
 
             let postDate = document.createElement("small");
-            postDate.innerHTML = (posts["posts"])[i].postedOn;
-
-            //Add posted by referencing the poster through "posters" key in JSON
+            postDate.innerHTML = (data["posts"])[i].postedOn;
+        
+            let OP = document.createElement("h6");
+            OP.innerHTML = ["Posted by" + " " + (data["posters"])[i]];
 
             postContainer.appendChild(postHeader);
             postContainer.appendChild(postBody);
             postContainer.appendChild(postDate);
+            postContainer.appendChild(OP);
             mainDiv.appendChild(postContainer);
         }
         
         setTimeout(()=>{
             start += LOAD_AMOUNT;
             end += LOAD_AMOUNT;
-            loadMoreListingsIsRunning = false;
+            loadMorePostsIsRunning = false;
         }, 1500);
     })
 

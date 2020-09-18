@@ -71,6 +71,10 @@ def create_post(request):
     if request.method == "POST":
         postHeader = request.POST["header"]
         postBody = request.POST["postBody"]
+
+        if postHeader == "" or postBody == "":
+            return HttpResponse("Post-empty error")
+
         postedBy = User.objects.get(pk=request.user.id)
 
         newPost = Post.objects.create(postBody=postBody, postHeader=postHeader, postedBy=postedBy)
@@ -89,6 +93,8 @@ def fetch_posts(request):
     for post in posts:
         poster = User.objects.get(pk=post["postedBy_id"])
         posters.append(str(poster))
+
+        post["postedOn"] = post["postedOn"].strftime("%#d %b %Y, %#I:%M %p")
     
     return JsonResponse({
         "posts": posts,
