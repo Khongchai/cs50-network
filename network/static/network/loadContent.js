@@ -1,31 +1,46 @@
 var loadMoreListingIsRunning = false;
 var getAll = document.querySelectorAll.bind(this);
-var mainDiv = document.getElementById("mainDiv");
+var mainDiv = document.getElementById("allPosts");
 var start = 0;
-var end = 4;
-const LOAD_AMOUNT = 5;
+var end = 5;
+var LOAD_AMOUNT = 5;
 
 //first load
-document.addEventListener("DOMContentLoaded", () => {
-    loadContent();
-});
-
-//load on scroll
+window.addEventListener("load", loadContent);
 
 
 function loadContent()
 {
+    console.log(start)
     //TODO - fetch_posts not working rn
     loadMoreListingIsRunning = true;
-    fetch(`/fetch_posts?start=${start}&${end}`)
+    fetch(`/fetch_posts?start=${start}&end=${end}`)
     .then(response => response.json())
     .then(posts => {
-        for (let i = 0; i < posts.length; i++)
+        console.log(posts)
+        for (let i = 0; i < posts["posts"].length; i++)
         {
             let postContainer = document.createElement("div");
+            postContainer.className = "subPosts";
             postContainer.id = ["post" + (i + start)];
 
+
             //TODO - load posts programmatically.
+            let postHeader = document.createElement("h5");
+            postHeader.innerHTML = (posts["posts"])[i].postHeader;
+
+            let postBody = document.createElement("p");
+            postBody.innerHTML = (posts["posts"])[i].postBody;
+
+            let postDate = document.createElement("small");
+            postDate.innerHTML = (posts["posts"])[i].postedOn;
+
+            //Add posted by referencing the poster through "posters" key in JSON
+
+            postContainer.appendChild(postHeader);
+            postContainer.appendChild(postBody);
+            postContainer.appendChild(postDate);
+            mainDiv.appendChild(postContainer);
         }
         
         setTimeout(()=>{
@@ -34,5 +49,7 @@ function loadContent()
             loadMoreListingsIsRunning = false;
         }, 1500);
     })
+
     
 }
+

@@ -84,8 +84,15 @@ def fetch_posts(request):
     start = int(request.GET.get("start")) 
     end = int(request.GET.get("end"))
     posts = list(Post.objects.values())[start:end]
+
+    posters = []
+    for post in posts:
+        poster = User.objects.get(pk=post["postedBy_id"])
+        posters.append(str(poster))
+    
     return JsonResponse({
-        "posts": posts
+        "posts": posts,
+        "posters": posters
     })
 
     
