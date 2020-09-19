@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block body %}
-    <h1>ALL POSTS</h1>
     {% if user.is_authenticated %}
+    <h1>ALL POSTS</h1>
     <div class="PostBlockMain">
         <form action="{% url 'create_post' %}" method="post">
             {% csrf_token %}
@@ -14,8 +14,10 @@
             <input type="submit" class="btn btn-primary" value="submit">
         </form>
     </div>
-    {% endif %}
     <div id="allPosts">
     </div>
     <script src="{% static 'network/loadContent.js' %}" ></script>
+    {% else %}
+    <h1>Log in to see posts</h1>
+    {% endif %}
 {% endblock %}

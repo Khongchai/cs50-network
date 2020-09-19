@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from network.models import *
 
@@ -87,7 +88,7 @@ def create_post(request):
 def fetch_posts(request):
     start = int(request.GET.get("start")) 
     end = int(request.GET.get("end"))
-    posts = list(Post.objects.values())[start:end]
+    posts = list(Post.objects.values().order_by("-postedOn"))[start:end]
 
     posters = []
     for post in posts:
@@ -99,6 +100,30 @@ def fetch_posts(request):
     return JsonResponse({
         "posts": posts,
         "posters": posters
-    })
+    }, status=200)
 
+@csrf_exempt
+def increment_likes(request):
+    if request.method == "POST":
+        post = Post.objects.get(pk=int(request.body))
+        user = request.user
+        #check if post is already liked by user
+
+        if user.likedPosts.filter(pk=int(request.body)).exists():
+            user.likedPosts.remove(post)
+            post.likes -= 1
+            post.save()
+        else:
+            user.likedPosts.add(post)
+            post.likes += 1
+            post.save()
+        
+        return JsonResponse({
+            "newLikes": post.likes
+        })
+    else:
+        return HttpResponse("Error 405: GET method not allowed")
+
+def show_followed(request):
+    return render(request, "network/followed.html")
     

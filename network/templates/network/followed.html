@@ -1,0 +1,11 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+    {% if user.is_authenticated %}
+        {% for post in user.likedPosts.all %}
+            <h5>Post name: post.postHeader</h5>
+        {% empty %}
+            <h1>You are currently not following any post!</h1>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
