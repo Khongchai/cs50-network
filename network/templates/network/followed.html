@@ -2,10 +2,15 @@
 {% load static %}
 {% block body %}
     {% if user.is_authenticated %}
-        {% for post in user.likedPosts.all %}
-            <h5>Post name: post.postHeader</h5>
-        {% empty %}
+        {% if not user.likedPosts.all  %}
             <h1>You are currently not following any post!</h1>
-        {% endfor %}
+        {% else %}
+        <h3>Posts you are following:</h3>
+            <div id="allPosts">
+
+            </div>
+        {% endif %}
     {% endif %}
+    <script src="{% static 'network/loadContent.js' %}" ></script>
+    <script src="{% static 'network/loadFollowing.js' %}"></script>
 {% endblock %}

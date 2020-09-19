@@ -88,7 +88,11 @@ def create_post(request):
 def fetch_posts(request):
     start = int(request.GET.get("start")) 
     end = int(request.GET.get("end"))
-    posts = list(Post.objects.values().order_by("-postedOn"))[start:end]
+    if request.GET.get("page") == "All Posts":
+        posts = list(Post.objects.values().order_by("-postedOn"))[start:end]
+    else:
+        posts = list(request.user.likedPosts.values().order_by("-postedOn"))[start:end]
+    
 
     posters = []
     for post in posts:
@@ -96,7 +100,7 @@ def fetch_posts(request):
         posters.append(str(poster))
 
         post["postedOn"] = post["postedOn"].strftime("%#d %b %Y, %#I:%M %p")
-    
+        
     return JsonResponse({
         "posts": posts,
         "posters": posters
