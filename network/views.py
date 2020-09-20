@@ -77,7 +77,6 @@ def create_post(request):
             return HttpResponse("Post-empty error")
 
         postedBy = User.objects.get(pk=request.user.id)
-
         newPost = Post.objects.create(postBody=postBody, postHeader=postHeader, postedBy=postedBy)
         newPost.save()
 
@@ -88,12 +87,16 @@ def create_post(request):
 def fetch_posts(request):
     start = int(request.GET.get("start")) 
     end = int(request.GET.get("end"))
-    if request.GET.get("page") == "All Posts":
+    page_name = request.GET.get("page")
+    if page_name == "All Posts":
         posts = list(Post.objects.values().order_by("-postedOn"))[start:end]
-    else:
+    elif page_name == "Following":
         posts = list(request.user.likedPosts.values().order_by("-postedOn"))[start:end]
+    else:
+        #TODO implement follow users button
+        #TODO load users that are followed by the current user
+        pass
     
-
     posters = []
     for post in posts:
         poster = User.objects.get(pk=post["postedBy_id"])
@@ -128,6 +131,21 @@ def increment_likes(request):
     else:
         return HttpResponse("Error 405: GET method not allowed")
 
+def follow_user(request):
+    pass
+
 def show_followed(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+
     return render(request, "network/followed.html")
     
+def show_followed_users(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "network/followed.html", {
+        "users": "users"
+    })
+
+        
+   

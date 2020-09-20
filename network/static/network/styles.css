@@ -28,6 +28,17 @@ textarea
     border-radius: 6px;
 }
 
+.LeftDivs
+{
+    display:inline-block;
+}
+.RightDivs
+{
+    float: right;
+}
+
+
+
 .subPosts
 {
     width: 100%;

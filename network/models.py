@@ -3,7 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
-    following = models.ForeignKey("User", on_delete=models.SET_NULL, null=True, related_name="followers")
+    following = models.ManyToManyField("User", related_name="followers")
     likedPosts = models.ManyToManyField("Post", related_name="likedBy")
 
 class Post(models.Model):

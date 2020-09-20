@@ -12,5 +12,9 @@
         {% endif %}
     {% endif %}
     <script src="{% static 'network/loadContent.js' %}" ></script>
-    <script src="{% static 'network/loadFollowing.js' %}"></script>
+    {% if users %}
+        <script src="{% static 'network/FollowingJS/loadFollowingUsers.js' %}"></script>
+    {% else %}
+        <script src="{% static 'network/FollowingJS/loadFollowing.js' %}"></script>
+    {% endif %}
 {% endblock %}
