@@ -88,6 +88,7 @@ def fetch_posts(request):
     start = int(request.GET.get("start")) 
     end = int(request.GET.get("end"))
     page_name = request.GET.get("page")
+    currentUser = request.user
     if page_name == "All Posts":
         posts = list(Post.objects.values().order_by("-postedOn"))[start:end]
     elif page_name == "Following":
@@ -101,12 +102,14 @@ def fetch_posts(request):
     for post in posts:
         poster = User.objects.get(pk=post["postedBy_id"])
         posters.append(str(poster))
-
         post["postedOn"] = post["postedOn"].strftime("%#d %b %Y, %#I:%M %p")
-        
+    users_followed_id = []
+    for user_val in currentUser.following.values():
+        users_followed_id.append(int(user_val["id"]))
     return JsonResponse({
         "posts": posts,
-        "posters": posters
+        "posters": posters,
+        "usersFollowedID": users_followed_id
     }, status=200)
 
 @csrf_exempt
@@ -119,11 +122,10 @@ def increment_likes(request):
         if user.likedPosts.filter(pk=int(request.body)).exists():
             user.likedPosts.remove(post)
             post.likes -= 1
-            post.save()
         else:
             user.likedPosts.add(post)
             post.likes += 1
-            post.save()
+        post.save()
         
         return JsonResponse({
             "newLikes": post.likes
@@ -131,8 +133,16 @@ def increment_likes(request):
     else:
         return HttpResponse("Error 405: GET method not allowed")
 
+@csrf_exempt
 def follow_user(request):
-    pass
+    currentUser = request.user
+    user_to_follow = User.objects.get(pk=int(request.body))
+    if currentUser.following.filter(pk=int(request.body)).exists():
+        currentUser.following.remove(currentUser)
+    else:
+        currentUser.following.add(currentUser)
+    currentUser.save()
+    return HttpResponse(status=204)
 
 def show_followed(request):
     if not request.user.is_authenticated:

@@ -30,16 +30,34 @@ function addLikes(postID)
     })
 }
 
-function followUser(userID)
+function followUser(posterID)
 {
-    //implement follow user
-    console.log(userID);
+    buttonsOnThisUserPost = document.querySelectorAll(".followUserButtons");
+    //TODO filter buttons to only those from this user's posts
+    console.log(buttonsOnThisUserPost);
+    fetch("/follow_user", {
+        method: "POST",
+        body: posterID
+    })
+    .then(response =>{
+        if (response.status === 204)
+        {
+            //TODO set all button whose posterID == posterID
+        }
+    })
+    
 }
 
 function fillPosts(data)
 {
     for (let i = 0; i < data["posts"].length; i++)
     {
+        //id of OP
+        let posterID = data["posts"][i].postedBy_id;
+
+        //id of people the current user is following
+        let usersFollowedID = data["usersFollowedID"];
+
         let postContainer = document.createElement("div");
         postContainer.className = "subPosts";
         postContainer.id = `Post${data["posts"][i].id}`;
@@ -49,11 +67,11 @@ function fillPosts(data)
         leftDiv.className = "LeftDivs";
         rightDiv.className = "RightDivs";
 
-        let followButton = document.createElement("button");
-        followButton.innerHTML = "Follow User";
-        followButton.className = "btn btn-primary";
-        followButton.addEventListener("click", ()=>{
-            followUser(data["posts"][i].postedBy_id);
+        let followButton = setButtonText(posterID, usersFollowedID);
+        //check if users that posted this post is in the usersFollowedID
+        //if in, set innerHTML to "Unfollow", else "Follow User"
+        followButton.addEventListener("click", function(){
+            followUser(posterID);
         })
 
         let postHeader = document.createElement("h5");
@@ -88,6 +106,24 @@ function fillPosts(data)
 
         mainDiv.appendChild(postContainer);
     }
+
+}
+
+function setButtonText(posterID, userFollowedID)
+{
+    let followButton = document.createElement("button");
+    followButton.setAttribute("posterID", posterID);
+    if (userFollowedID.includes(posterID))
+    {
+        followButton.innerHTML = "Unfollow User"
+    }
+    else
+    {
+        followButton.innerHTML = "Follow User";
+    }
+    followButton.className = "btn btn-primary";
+    followButton.classList.add("followUserButtons");
+    return followButton
 }
     
 
