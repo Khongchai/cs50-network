@@ -32,9 +32,7 @@ function addLikes(postID)
 
 function followUser(posterID)
 {
-    buttonsOnThisUserPost = document.querySelectorAll(".followUserButtons");
-    //TODO filter buttons to only those from this user's posts
-    console.log(buttonsOnThisUserPost);
+    let buttonsOnThisUserPost = document.querySelectorAll(`.followUserButtons[posterID=${CSS.escape(posterID)}]`);
     fetch("/follow_user", {
         method: "POST",
         body: posterID
@@ -42,7 +40,16 @@ function followUser(posterID)
     .then(response =>{
         if (response.status === 204)
         {
-            //TODO set all button whose posterID == posterID
+            buttonsOnThisUserPost.forEach((button) => {
+                if (button.innerHTML == "Follow User")
+                {
+                    button.innerHTML = "Unfollow User";
+                }
+                else
+                {
+                    button.innerHTML = "Follow User";
+                }
+            })
         }
     })
     
@@ -68,8 +75,6 @@ function fillPosts(data)
         rightDiv.className = "RightDivs";
 
         let followButton = setButtonText(posterID, usersFollowedID);
-        //check if users that posted this post is in the usersFollowedID
-        //if in, set innerHTML to "Unfollow", else "Follow User"
         followButton.addEventListener("click", function(){
             followUser(posterID);
         })
@@ -111,6 +116,7 @@ function fillPosts(data)
 
 function setButtonText(posterID, userFollowedID)
 {
+    //console.log(`Poster IDs: ${posterID} UserFollowedIDs: ${userFollowedID}`)
     let followButton = document.createElement("button");
     followButton.setAttribute("posterID", posterID);
     if (userFollowedID.includes(posterID))
@@ -125,6 +131,7 @@ function setButtonText(posterID, userFollowedID)
     followButton.classList.add("followUserButtons");
     return followButton
 }
-    
+
+
 
 
