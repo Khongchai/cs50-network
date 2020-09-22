@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 
 from network.models import *
 
@@ -166,6 +167,12 @@ def show_followed_users(request):
     return render(request, "network/followed.html", {
         "users": "users"
     })
+
+def user_info(request):
+    user_id = request.GET.get("userID")
+    user = User.objects.get(pk=user_id)
+    serialized_user = serializers.serialize('json', [ user, ])
+    return JsonResponse({"userInfo": serialized_user})
 
         
    

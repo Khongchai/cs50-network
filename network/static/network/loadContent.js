@@ -77,9 +77,10 @@ function fillPosts(data)
         rightDiv.className = "RightDivs";
 
         let followButton = setButtonText(posterID, usersFollowedID);
-        followButton.addEventListener("click", function(){
+        followButton.addEventListener("click", function(event){
+            event.stopPropagation();
             followUser(posterID);
-        })
+        });
         
         let postHeader = document.createElement("h5");
         postHeader.innerHTML = (data["posts"])[i].postHeader;
@@ -118,7 +119,6 @@ function fillPosts(data)
 
 function setButtonText(posterID, userFollowedID)
 {
-    //console.log(`Poster IDs: ${posterID} UserFollowedIDs: ${userFollowedID}`)
     let followButton = document.createElement("button");
     followButton.setAttribute("posterID", posterID);
     if (userFollowedID.includes(posterID))
@@ -136,7 +136,27 @@ function setButtonText(posterID, userFollowedID)
 
 function goToProfile(posterID)
 {
-    //TODO takes to user profile page where you can also leave comments
+    //TODO show user an overlay page where they can leave comments
+    fetch(`/user_info?userID=${posterID}`)
+    .then(response => response.json())
+    .then(data => {
+        //overlay is the page's background, if clicked on this background, the overlay is removed
+        let overlay = document.createElement("div");
+        overlay.id = "overlay";
+        overlay.onclick = function()
+        {
+            overlay.remove();
+        }
+        
+        let editPostBG = document.createElement("div");
+        editPostBG.id = "editPostBG";
+        editPostBG.onclick = (event) => {event.stopPropagation()};
+
+        overlay.appendChild(editPostBG);
+        mainDiv.appendChild(overlay);
+
+        
+    });
 }
 
 

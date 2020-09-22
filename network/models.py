@@ -6,6 +6,7 @@ class User(AbstractUser):
     following = models.ManyToManyField("User", related_name="followers")
     likedPosts = models.ManyToManyField("Post", related_name="likedBy")
 
+
 class Post(models.Model):
     postHeader = models.CharField(max_length=64, default="Enter Post Header")
     postBody = models.TextField(default="Enter Post Message")
