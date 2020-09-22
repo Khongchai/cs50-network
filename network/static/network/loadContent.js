@@ -68,8 +68,7 @@ function fillPosts(data)
         rightDiv.className = "RightDivs";
 
         let followButton = setButtonText(posterID, usersFollowedID);
-        //check if users that posted this post is in the usersFollowedID
-        //if in, set innerHTML to "Unfollow", else "Follow User"
+
         followButton.addEventListener("click", function(){
             followUser(posterID);
         })
