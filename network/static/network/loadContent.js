@@ -5,7 +5,6 @@ var start = 0;
 var end = 5;
 var submitButton = document.getElementById("submitButton");
 
-
 function loadContent(page)
 {
     fetch(`/fetch_posts?start=${start}&end=${end}&page=${page}`)
@@ -68,6 +67,9 @@ function fillPosts(data)
         let postContainer = document.createElement("div");
         postContainer.className = "subPosts";
         postContainer.id = `Post${data["posts"][i].id}`;
+        postContainer.onclick = () => {
+            goToProfile(posterID);
+        }
 
         let leftDiv = document.createElement("div");
         let rightDiv = document.createElement("div");
@@ -78,7 +80,7 @@ function fillPosts(data)
         followButton.addEventListener("click", function(){
             followUser(posterID);
         })
-
+        
         let postHeader = document.createElement("h5");
         postHeader.innerHTML = (data["posts"])[i].postHeader;
 
@@ -130,6 +132,11 @@ function setButtonText(posterID, userFollowedID)
     followButton.className = "btn btn-primary";
     followButton.classList.add("followUserButtons");
     return followButton
+}
+
+function goToProfile(posterID)
+{
+    //TODO takes to user profile page where you can also leave comments
 }
 
 

@@ -85,25 +85,35 @@ def create_post(request):
 
 #loading posts should be managed here only
 def fetch_posts(request):
+
     start = int(request.GET.get("start")) 
     end = int(request.GET.get("end"))
     page_name = request.GET.get("page")
+    posters = []
+    users_followed_id = []
     currentUser = request.user
+    posts = []
     if page_name == "All Posts":
         posts = list(Post.objects.values().order_by("-postedOn"))[start:end]
     elif page_name == "Following":
         posts = list(request.user.likedPosts.values().order_by("-postedOn"))[start:end]
+        #print(posts)
     else:
-        #TODO implement follow users button
-        #TODO load users that are followed by the current user
-        pass
-    
-    posters = []
-    for post in posts:
-        poster = User.objects.get(pk=post["postedBy_id"])
-        posters.append(str(poster))
-        post["postedOn"] = post["postedOn"].strftime("%#d %b %Y, %#I:%M %p")
-    users_followed_id = []
+        followed_users = request.user.following.all()
+        for poster in followed_users:
+            posts_from_followed = list(poster.postsByThisUser.values().order_by("-postedOn"))[start:end]
+            for post_from_followed in posts_from_followed:
+                posts.append(post_from_followed)
+            #Set posters here so we can skip the next part
+            posters.append(str(poster))
+         
+    #only do this if "posters" is empty
+    if not posters:
+        for post in posts:
+            poster = User.objects.get(pk=post["postedBy_id"])
+            posters.append(str(poster))
+            post["postedOn"] = post["postedOn"].strftime("%#d %b %Y, %#I:%M %p")
+
     for user_val in currentUser.following.values():
         users_followed_id.append(int(user_val["id"]))
     return JsonResponse({
@@ -138,9 +148,9 @@ def follow_user(request):
     currentUser = request.user
     user_to_follow = User.objects.get(pk=int(request.body))
     if currentUser.following.filter(pk=int(request.body)).exists():
-        currentUser.following.remove(currentUser)
+        currentUser.following.remove(user_to_follow)
     else:
-        currentUser.following.add(currentUser)
+        currentUser.following.add(user_to_follow)
     currentUser.save()
     return HttpResponse(status=204)
 

@@ -4,6 +4,37 @@ body
     margin-right: 20px;
 }
 
+.ViewSelectors
+{
+    margin-top: 10px;
+    display: grid;
+    border-radius: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    column-gap: 10px;
+    width:100%;
+    border-collapse: collapse;
+    height: 90px;
+}
+
+.ViewSelector
+{
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    background-color: cadetblue;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    border-collapse: collapse;
+    justify-content: center;
+
+}
+.followUserButtons
+{
+    background-color: lightcyan;
+    color: black;
+}
 .pointerCursor
 {
     cursor: pointer;
@@ -20,6 +51,13 @@ body
 {
     margin-top: 30px;
     margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-rows: repeat(6, 200px);
+    grid-auto-flow: dense;
+    row-gap: 3rem;
+    column-gap: 1.7rem;
+  
 }
 
 textarea
@@ -34,15 +72,59 @@ textarea
 }
 .RightDivs
 {
-    float: right;
+    text-align: right;
 }
 
-
-
-.subPosts
+.subPosts 
 {
+    transition: transform .2s;
     width: 100%;
-    border: 1px solid black;
+    height: 100%;
+    border: 1px solid blanchedalmond;
+    border-radius: 7px;
+    color: blanchedalmond;
+    background-color: darkgray;
     padding: 20px;
-    margin: 14px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+    overflow: hidden;
+    cursor: pointer;
 }
+.LeftDivs > p
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.subPosts:nth-child(4n)
+{
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.subPosts:nth-child(3n)
+{
+    background-color: rgb(22, 216, 151);
+}
+.subPosts:nth-child(6n)
+{
+    background-color: gold;
+    color: black;
+}
+.subPosts:nth-child(10n)
+{
+    grid-column: span 1.5;
+    grid-row: span 1.5;
+}
+body
+{
+    background-color: whitesmoke;
+}
+
+.subPosts:hover
+{
+    opacity: 0.8;
+    transform: scale(1.09);
+    
+}
+
