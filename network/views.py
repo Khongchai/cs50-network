@@ -173,8 +173,7 @@ def user_info(request):
     post = Post.objects.get(pk=post_id)
     return JsonResponse(post.serialize())
 
-def get_commenter(request):
-    pass
-
+def add_comment(request):
+    print("add comment view")
         
    

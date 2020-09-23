@@ -33,11 +33,13 @@ class Comment(models.Model):
     commentBody = models.TextField()
     commentedOn = models.ForeignKey(Post, on_delete=models.CASCADE,related_name="commentsOnThisPost")
     commentedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="commentsByThisUser")
+    commentedWhen = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def serialize(self):
         return {
             "commentBody": self.commentBody,
             "commentedOn": int(self.commentedOn.id),
-            "commentedBy": str(self.commentedBy)
+            "commentedBy": str(self.commentedBy),
+            "commentedWhen": self.commentedWhen.strftime("%b %#d %Y, %#I:%M %p")
         }
 

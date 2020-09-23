@@ -155,6 +155,7 @@ function goToPost(postID, postColor)
         let editPostBG = document.createElement("div");
         editPostBG.id = "editPostBG";
         editPostBG.style.backgroundColor = postColor;
+        editPostBG.className = "HideScroll";
         editPostBG.onclick = (event) => {event.stopPropagation()};
 
         let postHeader = document.createElement("h3");
@@ -176,9 +177,17 @@ function goToPost(postID, postColor)
                 let commenter = document.createElement("h5");
                 commenter.innerHTML = `${comment.commentedBy} said:`;
                 let commentBody = document.createElement('p');
+                commentBody.style.marginBottom = 0;
                 commentBody.innerHTML = comment.commentBody;
+                let date = document.createElement("p");
+                date.innerHTML = `${comment.commentedWhen}`;
+                date.style.marginBottom = "1.6 rem";
+                date.style.fontSize = "10px";
+                date.className = "bodyComment";
+
                 commentContainer.appendChild(commenter);
                 commentContainer.appendChild(commentBody);
+                commentContainer.appendChild(date);
                 comments.appendChild(commentContainer)
             });
         }
@@ -187,11 +196,37 @@ function goToPost(postID, postColor)
             comments.innerHTML = "No comments yet";
         }
 
+///////////////////////////////////////////////////////////////////////
+
+        let addComments = document.createElement("div");
+        let comment = document.createElement("form");
+        comment.onsubmit = (e) => {
+            e.preventDefault();
+            addComment();
+        }
+        let commentField = document.createElement("textarea");
+        commentField.className = "inputSize";
+        let submitButton = document.createElement("input");
+
+        comment.method = "POST";
+
+        commentField.type = "text";
+        commentField.name = "newComment";
+        submitButton.type = "submit";
+        submitButton.value = "Post Commet";
+        submitButton.className = "btn btn-primary";
+
+        comment.appendChild(commentField);
+        comment.appendChild(submitButton);
+        addComments.appendChild(comment);
+
+/////////////////////////////////////////////////////////////////
 
         editPostBG.appendChild(postHeader);
         editPostBG.appendChild(postBody);
         editPostBG.appendChild(postedBy);
         editPostBG.appendChild(comments);
+        editPostBG.appendChild(addComments);
         overlayBG.appendChild(editPostBG);
         mainDiv.appendChild(overlayBG);
 
@@ -199,7 +234,19 @@ function goToPost(postID, postColor)
 
         
     });
+
+
 }
+
+function addComment()
+{
+    //TODO fetch with Post to add comment
+    //try to add CSRF from here
+}
+
+
+//BIG TODO
+//Deploy this somewhere
 
 
 
