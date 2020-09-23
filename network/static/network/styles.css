@@ -80,10 +80,10 @@ textarea
     transition: transform .2s;
     width: 100%;
     height: 100%;
-    border: 1px solid blanchedalmond;
-    border-radius: 7px;
-    color: blanchedalmond;
-    background-color: darkgray;
+    border: 1px solid black;
+    border-radius: 11px;
+    color: rgb(31, 29, 26);
+    background-color: #EBD2D7;
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
@@ -101,7 +101,10 @@ textarea
     grid-column: span 2;
     grid-row: span 2;
 }
-
+.subPosts:nth-child(2n)
+{
+    background-color: #9477cb;
+}
 .subPosts:nth-child(3n)
 {
     background-color: rgb(22, 216, 151);
@@ -118,7 +121,7 @@ textarea
 }
 body
 {
-    background-color: whitesmoke;
+    background-color: #E4A199;
 }
 
 .subPosts:hover
@@ -144,10 +147,27 @@ body
 }
 #editPostBG
 {
+    border-radius: 10px;
+    padding: 30px;
     cursor: default;
     width: 80%;
     height: 80%;
-    background-color: white;
     z-index: 100;
+    color: black;
+}
+
+.headerComment
+{
+    text-align: center;
+}
+.posterComment
+{
+    text-align: right;
+}
+.bodyComment
+{
+    padding-bottom: 10px;
+    margin: 3px 0px; 
+    border-bottom: 1px solid black;
 }
 

@@ -66,9 +66,10 @@ function fillPosts(data)
 
         let postContainer = document.createElement("div");
         postContainer.className = "subPosts";
-        postContainer.id = `Post${data["posts"][i].id}`;
+        postContainer.id = `${data["posts"][i].id}`;
         postContainer.onclick = () => {
-            goToProfile(posterID);
+            let postColor = window.getComputedStyle(postContainer).getPropertyValue("background-color");
+            goToPost(postContainer.id, postColor);
         }
 
         let leftDiv = document.createElement("div");
@@ -80,6 +81,8 @@ function fillPosts(data)
         followButton.addEventListener("click", function(event){
             event.stopPropagation();
             followUser(posterID);
+            
+            
         });
         
         let postHeader = document.createElement("h5");
@@ -95,7 +98,9 @@ function fillPosts(data)
         OP.innerHTML = `Posted by ${data["posters"][i]}`;
 
         let heart = document.createElement("h5");
-        heart.addEventListener("click", () => {
+        heart.style.width = "fit-content";
+        heart.addEventListener("click", (e) => {
+            e.stopPropagation();
             addLikes(data["posts"][i].id)
         });
         heart.innerHTML = `<span class="pointerCursor">&#10084;</span> 
@@ -134,26 +139,63 @@ function setButtonText(posterID, userFollowedID)
     return followButton
 }
 
-function goToProfile(posterID)
+function goToPost(postID, postColor)
 {
     //TODO show user an overlay page where they can leave comments
-    fetch(`/user_info?userID=${posterID}`)
+    fetch(`/user_info?postID=${parseInt(postID)}`)
     .then(response => response.json())
     .then(data => {
-        //overlay is the page's background, if clicked on this background, the overlay is removed
-        let overlay = document.createElement("div");
-        overlay.id = "overlay";
-        overlay.onclick = function()
+        let overlayBG = document.createElement("div");
+        overlayBG.id = "overlay";
+        overlayBG.onclick = function()
         {
-            overlay.remove();
+            overlayBG.remove();
         }
         
         let editPostBG = document.createElement("div");
         editPostBG.id = "editPostBG";
+        editPostBG.style.backgroundColor = postColor;
         editPostBG.onclick = (event) => {event.stopPropagation()};
 
-        overlay.appendChild(editPostBG);
-        mainDiv.appendChild(overlay);
+        let postHeader = document.createElement("h3");
+        postHeader.className = "headerComment";
+        let postBody = document.createElement("p");
+        postBody.className = "bodyComment";
+        let postedBy = document.createElement("h6");
+        postedBy.className = "posterComment";
+        
+        postHeader.innerHTML = data.postHeader;
+        postBody.innerHTML = data.postBody;
+        postedBy.innerHTML = `Posted by: ${data.postedBy}`;
+
+        let comments = document.createElement('div');
+        if (data.commentsOnThisPost.length > 0)
+        {
+            data.commentsOnThisPost.forEach(comment => {
+                let commentContainer = document.createElement('div');
+                let commenter = document.createElement("h5");
+                commenter.innerHTML = `${comment.commentedBy} said:`;
+                let commentBody = document.createElement('p');
+                commentBody.innerHTML = comment.commentBody;
+                commentContainer.appendChild(commenter);
+                commentContainer.appendChild(commentBody);
+                comments.appendChild(commentContainer)
+            });
+        }
+        else
+        {
+            comments.innerHTML = "No comments yet";
+        }
+
+
+        editPostBG.appendChild(postHeader);
+        editPostBG.appendChild(postBody);
+        editPostBG.appendChild(postedBy);
+        editPostBG.appendChild(comments);
+        overlayBG.appendChild(editPostBG);
+        mainDiv.appendChild(overlayBG);
+
+        //deal with comments later
 
         
     });

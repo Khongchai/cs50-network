@@ -17,10 +17,27 @@ class Post(models.Model):
     def __str__(self):
         return f"{self.postHeader} by {self.postedBy}"
 
+    def serialize(self):
+        return {
+            "likes": self.likes,
+            "postedOn": self.postedOn.strftime("%b %#d %Y, %#I:%M %p"),
+            "postedBy": str(self.postedBy),
+            "postHeader": self.postHeader,
+            "postBody": self.postBody,
+            "commentsOnThisPost": [comment.serialize() for comment in self.commentsOnThisPost.all()]
+        }
+
 
 
 class Comment(models.Model):
     commentBody = models.TextField()
     commentedOn = models.ForeignKey(Post, on_delete=models.CASCADE,related_name="commentsOnThisPost")
     commentedBy = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="commentsByThisUser")
+
+    def serialize(self):
+        return {
+            "commentBody": self.commentBody,
+            "commentedOn": int(self.commentedOn.id),
+            "commentedBy": str(self.commentedBy)
+        }
 

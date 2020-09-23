@@ -14,5 +14,6 @@ urlpatterns = [
     path("show_followed", views.show_followed, name="show_followed"),
     path("show_followed_users", views.show_followed_users, name="show_followed_users"),
     path("follow_user", views.follow_user, name="follow_user"),
-    path("user_info", views.user_info, name="user_info")
+    path("user_info", views.user_info, name="user_info"),
+    path("get_commenter", views.get_commenter, name="get_commenter")
 ]

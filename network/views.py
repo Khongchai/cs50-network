@@ -169,10 +169,12 @@ def show_followed_users(request):
     })
 
 def user_info(request):
-    user_id = request.GET.get("userID")
-    user = User.objects.get(pk=user_id)
-    serialized_user = serializers.serialize('json', [ user, ])
-    return JsonResponse({"userInfo": serialized_user})
+    post_id = request.GET.get("postID")
+    post = Post.objects.get(pk=post_id)
+    return JsonResponse(post.serialize())
+
+def get_commenter(request):
+    pass
 
         
    
