@@ -202,7 +202,7 @@ function goToPost(postID, postColor)
         let comment = document.createElement("form");
         comment.onsubmit = (e) => {
             e.preventDefault();
-            addComment();
+            addComment(commentField.value, postID);
         }
         let commentField = document.createElement("textarea");
         commentField.className = "inputSize";
@@ -229,22 +229,45 @@ function goToPost(postID, postColor)
         editPostBG.appendChild(addComments);
         overlayBG.appendChild(editPostBG);
         mainDiv.appendChild(overlayBG);
-
-        //deal with comments later
-
-        
     });
 
 
 }
 
-function addComment()
+function addComment(newComment, postID)
 {
-    //TODO fetch with Post to add comment
-    //try to add CSRF from here
+    
+    const csrftoken = getCookie('csrftoken');
+    const request = new Request(
+        "/add_comment",
+        {headers: {'X-CSRFToken': csrftoken}}
+    );
+    fetch(request, {
+        method: "POST",
+        body: JSON.stringify({"newComment": newComment, "postID": postID}),
+        mode: "same-origin"
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
 }
 
-
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 //BIG TODO
 //Deploy this somewhere
 

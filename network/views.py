@@ -4,8 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.core import serializers
+import json
 
 from network.models import *
 
@@ -174,6 +175,11 @@ def user_info(request):
     return JsonResponse(post.serialize())
 
 def add_comment(request):
-    print("add comment view")
+    if request.method == "POST":
+        data = json.loads(request.body)
+        new_comment = data["newComment"]
+        post = Post.objects.get(pk=int(data["postID"]))
+        user = request.user
+        #TODO add new comment to database then append the comment with js
         
    
