@@ -177,9 +177,20 @@ def user_info(request):
 def add_comment(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        new_comment = data["newComment"]
         post = Post.objects.get(pk=int(data["postID"]))
         user = request.user
-        #TODO add new comment to database then append the comment with js
+        new_comment = Comment(commentBody=data["newComment"], commentedOn=post, commentedBy=user)
+        new_comment.save()
+        return JsonResponse(new_comment.serialize())
+    else:
+        return HttpResponse("Error, POST request required", status=400)
         
    
+def edit_comment(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        data = json.loads(request.body)
+        post = Post.objects.get(pk=int(data["postID"]))
+        post.postBody = data["newPostBody"]
+        post.save()
+        return JsonResponse({"editedComment": post.postBody})
+        

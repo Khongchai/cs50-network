@@ -17,6 +17,9 @@
 
     <div id="allPosts">
     </div>
+    <script type="text/javascript">
+        var currentLoggedUser = "{{user}}";
+    </script>
     <script src="{% static 'network/loadContent.js' %}" ></script>
     <script src="{% static 'network/FollowingJS/loadAllPosts.js' %}"></script>
     {% else %}

@@ -49,6 +49,8 @@ body
 }
 #allPosts
 {
+    max-width: 1300px;
+    margin: 0 auto;
     margin-top: 30px;
     margin-bottom: 30px;
     display: grid;

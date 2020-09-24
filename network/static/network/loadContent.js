@@ -89,6 +89,7 @@ function fillPosts(data)
         postHeader.innerHTML = (data["posts"])[i].postHeader;
 
         let postBody = document.createElement("p");
+        postBody.id = `postBody${data["posts"][i].id}`;
         postBody.innerHTML = (data["posts"])[i].postBody;
 
         let postDate = document.createElement("small");
@@ -162,6 +163,7 @@ function goToPost(postID, postColor)
         postHeader.className = "headerComment";
         let postBody = document.createElement("p");
         postBody.className = "bodyComment";
+        postBody.id = "postBody";
         let postedBy = document.createElement("h6");
         postedBy.className = "posterComment";
         
@@ -170,57 +172,52 @@ function goToPost(postID, postColor)
         postedBy.innerHTML = `Posted by: ${data.postedBy}`;
 
         let comments = document.createElement('div');
+        comments.id = "MainCommentsBlock";
         if (data.commentsOnThisPost.length > 0)
         {
             data.commentsOnThisPost.forEach(comment => {
-                let commentContainer = document.createElement('div');
-                let commenter = document.createElement("h5");
-                commenter.innerHTML = `${comment.commentedBy} said:`;
-                let commentBody = document.createElement('p');
-                commentBody.style.marginBottom = 0;
-                commentBody.innerHTML = comment.commentBody;
-                let date = document.createElement("p");
-                date.innerHTML = `${comment.commentedWhen}`;
-                date.style.marginBottom = "1.6 rem";
-                date.style.fontSize = "10px";
-                date.className = "bodyComment";
-
-                commentContainer.appendChild(commenter);
-                commentContainer.appendChild(commentBody);
-                commentContainer.appendChild(date);
-                comments.appendChild(commentContainer)
+                loadComments(comment, comments);
             });
         }
         else
         {
             comments.innerHTML = "No comments yet";
         }
-
-///////////////////////////////////////////////////////////////////////
-
         let addComments = document.createElement("div");
         let comment = document.createElement("form");
         comment.onsubmit = (e) => {
             e.preventDefault();
-            addComment(commentField.value, postID);
+            addComment(commentField, postID);
         }
         let commentField = document.createElement("textarea");
         commentField.className = "inputSize";
         let submitButton = document.createElement("input");
-
         comment.method = "POST";
-
         commentField.type = "text";
         commentField.name = "newComment";
+        commentField.id = "textEditField";
         submitButton.type = "submit";
-        submitButton.value = "Post Commet";
+        submitButton.value = "Post Comment";
         submitButton.className = "btn btn-primary";
 
         comment.appendChild(commentField);
         comment.appendChild(submitButton);
-        addComments.appendChild(comment);
 
-/////////////////////////////////////////////////////////////////
+        //if logged user = post owner
+        console.log(`${data.postedBy} ${currentLoggedUser}`);
+        if (data.postedBy == currentLoggedUser)
+        {      
+            let editButton = document.createElement("button");
+            editButton.className = "btn btn-primary";
+            editButton.style.marginLeft = "9px";
+            editButton.innerHTML = "Edit Post";
+            editButton.onclick = (e) => {
+                e.preventDefault();
+                fillFormForEdit(commentField, postBody, editButton, postID);
+            }
+            comment.appendChild(editButton);
+        }
+        addComments.appendChild(comment);
 
         editPostBG.appendChild(postHeader);
         editPostBG.appendChild(postBody);
@@ -234,9 +231,8 @@ function goToPost(postID, postColor)
 
 }
 
-function addComment(newComment, postID)
+function addComment(commentField, postID)
 {
-    
     const csrftoken = getCookie('csrftoken');
     const request = new Request(
         "/add_comment",
@@ -244,12 +240,15 @@ function addComment(newComment, postID)
     );
     fetch(request, {
         method: "POST",
-        body: JSON.stringify({"newComment": newComment, "postID": postID}),
+        body: JSON.stringify({"newComment": commentField.value, "postID": postID}),
         mode: "same-origin"
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        commentField.value = "";
+        let comments = document.getElementById("MainCommentsBlock");
+        loadComments(data, comments);
+
     })
 }
 
@@ -267,6 +266,59 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function loadComments(comment, comments)
+{
+    let commentContainer = document.createElement('div');
+                let commenter = document.createElement("h5");
+                commenter.innerHTML = `${comment.commentedBy} said:`;
+                let commentBody = document.createElement('p');
+                commentBody.style.marginBottom = 0;
+                commentBody.innerHTML = comment.commentBody;
+                let date = document.createElement("p");
+                date.innerHTML = `${comment.commentedWhen}`;
+                date.style.marginBottom = "1.6 rem";
+                date.style.fontSize = "10px";
+                date.className = "bodyComment";
+
+                commentContainer.appendChild(commenter);
+                commentContainer.appendChild(commentBody);
+                commentContainer.appendChild(date);
+                if (comments.innerHTML == "No comments yet")
+                {
+                    comments.innerHTML = "";
+                }
+                comments.appendChild(commentContainer);
+}
+
+function fillFormForEdit(commentField, comment, editButton, postID)
+{
+    let text = editButton.innerHTML;
+    editButton.innerHTML = text === "Save"? "Edit Post": "Save";
+    commentField.innerHTML = comment.innerHTML;
+    if (editButton.innerHTML === "Edit Post")
+    {
+        //get Current text field value
+        console.log(commentField.value);
+        const csrftoken = getCookie('csrftoken');
+        const request = new Request(
+            "/edit_comment",
+            {headers: {'X-CSRFToken': csrftoken}}
+        );
+        fetch(request, {
+            method: "POST",
+            body: JSON.stringify({"newPostBody": commentField.value, "postID": postID}),
+            mode: "same-origin"
+        })
+        .then(response => response.json())
+        .then(data => {
+            postBody = document.getElementById("postBody");
+            postBody.innerHTML = data.editedComment;
+            document.getElementById(`postBody${postID}`).innerHTML = postBody.innerHTML;
+        })
+    }
+    
 }
 //BIG TODO
 //Deploy this somewhere
