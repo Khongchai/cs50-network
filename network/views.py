@@ -12,7 +12,7 @@ from network.models import *
 
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", status=200)
 
 
 def login_view(request):
