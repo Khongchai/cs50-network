@@ -85,7 +85,7 @@ DATABASES = {
     }
 }
 
-if os.environ.get('GITHUB_WORKFLOW'):
+if os.environ.get('GITHUB_WORKFLOW') or os.environ.get('HEROKU'):
     DATABASES = {
         'default': {
            'ENGINE': 'django.db.backends.postgresql',
