@@ -40,6 +40,13 @@ class NetworkTestCase(TestCase):
         self.assertEqual(initial_likes + 1, iris_post2.likes)
         self.assertEqual(Khong, iris_post2.likedBy.first())
 
+    def test_follow_user(self):
+        Khong = User.objects.get(username="Khong")
+        Iris = User.objects.get(username="Iris")
+        Iris.following.add(Khong)
+        self.assertEqual(Iris.following.get(username=Khong), Khong)
+
+
 
         
 
