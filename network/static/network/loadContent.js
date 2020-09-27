@@ -4,16 +4,24 @@ var LOAD_AMOUNT = 5;
 var start = 0;
 var end = 5;
 var submitButton = document.getElementById("submitButton");
+var isLoading = false;
 
 function loadContent(page)
 {
-    fetch(`/fetch_posts?start=${start}&end=${end}&page=${page}`)
-    .then(response => response.json())
-    .then(data => {
-        fillPosts(data);
-        start += LOAD_AMOUNT
-        end += LOAD_AMOUNT
-    })
+    if (!isLoading)
+    {
+        isLoading = true;
+        fetch(`/fetch_posts?start=${start}&end=${end}&page=${page}`)
+        .then(response => response.json())
+        .then(data => {
+            fillPosts(data);
+            start += LOAD_AMOUNT
+            end += LOAD_AMOUNT
+        }, setTimeout(() => {  
+            isLoading = false;
+        }, 1000));
+    }
+
 }  
 
 function addLikes(postID)

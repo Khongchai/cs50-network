@@ -1,7 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
+
 body
 {
     margin-left: 20px;
     margin-right: 20px;
+    font-family: 'DM Mono', monospace !important;
+    color: white;
+}
+
+.body > h1
+{
+    text-align: center;
+    margin: 20px;
+    
 }
 
 .ViewSelectors
@@ -43,10 +54,22 @@ body
 .PostBlockMain
 {
     width: 100%;
-    border: 1px solid blanchedalmond;
     padding: 20px;
     border-radius: 6px;
+    max-width: 1300px;
+    display: grid;
+    margin: 0 auto;
+
 }
+#main-form
+{
+    display: grid;
+    justify-content: center;
+    align-content: stretch;
+    grid-template-rows: 50px 50px 1fr 50px;
+    grid-template-columns: minmax(300px, 700px);
+}
+
 #allPosts
 {
     max-width: 1300px;
@@ -55,7 +78,7 @@ body
     margin-bottom: 30px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-template-rows: repeat(4, 200px);
+    grid-template-rows: repeat(4, 250px);
     grid-auto-flow: dense;
     row-gap: 3rem;
     column-gap: 1.7rem;
@@ -79,13 +102,15 @@ textarea
 
 .subPosts 
 {
-    transition: transform .2s;
+    transition: .2s;
     width: 100%;
     height: 100%;
     border: 1px solid black;
     border-radius: 11px;
-    color: rgb(31, 29, 26);
-    background-color: #EBD2D7;
+    color: whitesmoke;
+    background: #201c29;
+    border-radius: 10px;
+    opacity: 0.9;
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
@@ -93,6 +118,13 @@ textarea
     cursor: pointer;
 }
 .LeftDivs > p
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.LeftDivs > h5
 {
     white-space: nowrap;
     overflow: hidden;
@@ -123,13 +155,21 @@ textarea
 }
 body
 {
-    background-color: #E4A199;
+    background-color: #17141d;
 }
 
 .subPosts:hover
 {
-    opacity: 0.8;
+    opacity: 1;
     transform: scale(1.09);
+    box-shadow: -1rem 0rem 2rem #000;
+}
+
+.navbarCustom
+{
+    display: grid;
+    place-content: center;   
+    border-radius: 10px;
 }
 
 #overlay

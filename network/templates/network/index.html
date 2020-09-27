@@ -5,12 +5,12 @@
     {% if user.is_authenticated %}
     <h1>ALL POSTS</h1>
     <div class="PostBlockMain">
-        <form action="{% url 'create_post' %}" method="post">
+        <form action="{% url 'create_post' %}" id="main-form" method="post">
             {% csrf_token %}
 
-            <h3>New Post</h3>
-            <input type="text" name="header" class="form-control" style="width: 50%; margin-bottom: 10px;" required>
-            <textarea style="width: 50%" id="" cols="30" rows="10" name="postBody" required></textarea>
+            <h3 style="text-align: center">New Post</h3>
+            <input type="text" name="header" class="form-control" style="width: 100%; margin-bottom: 10px;" required>
+            <textarea style="width: 100%" id="" cols="30" rows="10" name="postBody" required></textarea>
             <input type="submit" id="submitButton" class="btn btn-primary" value="submit">
         </form>
     </div>
