@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
+
+body
+{
+    margin-left: 20px;
+    margin-right: 20px;
+    font-family: 'DM Mono', monospace !important;
+    color: white;
+}
+
+.body > h1
+{
+    text-align: center;
+    margin: 20px;
+    
+}
+
+.ViewSelectors
+{
+    margin-top: 10px;
+    display: grid;
+    border-radius: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    column-gap: 10px;
+    width:100%;
+    border-collapse: collapse;
+    height: 90px;
+}
+
+.ViewSelector
+{
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    background-color: cadetblue;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    border-collapse: collapse;
+    justify-content: center;
+
+}
+.followUserButtons
+{
+    background-color: lightcyan;
+    color: black;
+}
+.pointerCursor
+{
+    cursor: pointer;
+}
+
+.PostBlockMain
+{
+    width: 100%;
+    padding: 20px;
+    border-radius: 6px;
+    max-width: 1300px;
+    display: grid;
+    margin: 0 auto;
+
+}
+#main-form
+{
+    display: grid;
+    justify-content: center;
+    align-content: stretch;
+    grid-template-rows: 50px 50px 1fr 50px;
+    grid-template-columns: minmax(300px, 700px);
+}
+
+#allPosts
+{
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-rows: repeat(4, 250px);
+    grid-auto-flow: dense;
+    row-gap: 3rem;
+    column-gap: 1.7rem;
+  
+}
+
+textarea
+{
+    padding: 5px;
+    border-radius: 6px;
+}
+
+.LeftDivs
+{
+    display:inline-block;
+}
+.RightDivs
+{
+    text-align: right;
+}
+
+.subPosts 
+{
+    transition: .2s;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    border-radius: 11px;
+    color: whitesmoke;
+    background: #201c29;
+    border-radius: 10px;
+    opacity: 0.9;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+    overflow: hidden;
+    cursor: pointer;
+}
+.LeftDivs > p
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.LeftDivs > h5
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.subPosts:nth-child(4n)
+{
+    grid-column: span 2;
+    grid-row: span 2;
+}
+.subPosts:nth-child(2n)
+{
+    background-color:burlywood;
+}
+.subPosts:nth-child(3n)
+{
+    background-color:darkolivegreen;
+}
+.subPosts:nth-child(6n)
+{
+    background-color: gold;
+    color: black;
+}
+.subPosts:nth-child(10n)
+{
+    grid-column: span 1.5;
+    grid-row: span 1.5;
+}
+body
+{
+    background-color: #17141d;
+}
+
+.subPosts:hover
+{
+    opacity: 1;
+    transform: scale(1.09);
+    box-shadow: -1rem 0rem 2rem #000;
+}
+
+.navbarCustom
+{
+    display: grid;
+    place-content: center;   
+    border-radius: 10px;
+}
+
+#overlay
+{
+    position: fixed; /* Sit on top of the page content */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 99; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+    display: grid;
+    place-items: center;
+}
+#editPostBG
+{
+    border-radius: 10px;
+    padding: 30px;
+    cursor: default;
+    width: 80%;
+    height: 80%;
+    z-index: 100;
+    color: black;
+}
+
+.headerComment
+{
+    text-align: center;
+}
+.posterComment
+{
+    text-align: right;
+}
+.bodyComment
+{
+    padding-bottom: 10px;
+    margin: 3px 0px; 
+    border-bottom: 1px solid black;
+}
+
+.HideScroll {
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.HideScroll::-webkit-scrollbar { 
+    overflow-y: scroll;
+    display: none;  /* Safari and Chrome */
+}
+
+.inputSize
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 300px;
+    overflow-y: scroll;
+}
